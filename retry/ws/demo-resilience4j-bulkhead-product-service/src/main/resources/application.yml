@@ -1,0 +1,19 @@
+server:
+  tomcat:
+    max-threads: 15
+rating-service:
+  url: http://localhost:8084/v1/ratings
+resilience4j.bulkhead:
+  instances:
+    rating-service:
+      maxConcurrentCalls: 10
+      maxWaitDuration: 10ms
+resilience4j.retry:
+  instances:
+    rating-service:
+      maxAttempts: 3
+      waitDuration: 10s
+      retryExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+      ignoreExceptions:
+        - java.lang.ArrayIndexOutOfBoundsException
